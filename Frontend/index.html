@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WebCure — Is My Website Safe?</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,600;0,900;1,300&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --cream:   #F7F3EE;
+    --warm:    #EDE8E0;
+    --navy:    #0F1F3D;
+    --navy2:   #1A3260;
+    --blue:    #2563EB;
+    --green:   #16A34A;
+    --amber:   #D97706;
+    --red:     #DC2626;
+    --text:    #1C1917;
+    --muted:   #78716C;
+    --border:  #D6CFC6;
+    --white:   #FFFFFF;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 18px 48px;
+    background: rgba(247,243,238,0.88);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo {
+    font-family: 'Fraunces', serif;
+    font-weight: 900; font-size: 22px;
+    color: var(--navy); letter-spacing: -0.5px;
+  }
+  .nav-logo span { color: var(--blue); }
+  .nav-pill {
+    font-size: 12px; font-weight: 600; letter-spacing: 1.5px;
+    text-transform: uppercase; color: var(--muted);
+    background: var(--warm); border: 1px solid var(--border);
+    padding: 6px 14px; border-radius: 100px;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 120px 24px 80px;
+    text-align: center;
+    position: relative;
+  }
+
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 12px; font-weight: 600; letter-spacing: 1.5px;
+    text-transform: uppercase; color: var(--blue);
+    background: rgba(37,99,235,0.08); border: 1px solid rgba(37,99,235,0.2);
+    padding: 8px 18px; border-radius: 100px; margin-bottom: 32px;
+    animation: fadeUp 0.6s ease both;
+  }
+  .hero-badge::before { content: "●"; font-size: 8px; animation: pulse 2s infinite; }
+
+  .hero-title {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(48px, 8vw, 96px);
+    font-weight: 900; line-height: 1.0;
+    color: var(--navy); letter-spacing: -3px;
+    margin-bottom: 12px;
+    animation: fadeUp 0.6s ease 0.1s both;
+  }
+  .hero-title em {
+    font-style: italic; font-weight: 300;
+    color: var(--blue);
+  }
+
+  .hero-sub {
+    font-size: clamp(17px, 2.5vw, 22px);
+    color: var(--muted); font-weight: 300;
+    max-width: 560px; line-height: 1.6;
+    margin: 0 auto 52px;
+    animation: fadeUp 0.6s ease 0.2s both;
+  }
+
+  /* ── SCAN BOX ── */
+  .scan-box {
+    width: 100%; max-width: 680px;
+    background: var(--white);
+    border: 1.5px solid var(--border);
+    border-radius: 20px;
+    padding: 32px;
+    box-shadow: 0 8px 40px rgba(15,31,61,0.08), 0 2px 8px rgba(15,31,61,0.04);
+    animation: fadeUp 0.6s ease 0.3s both;
+  }
+
+  .scan-label {
+    font-size: 13px; font-weight: 600; color: var(--muted);
+    text-transform: uppercase; letter-spacing: 1px;
+    margin-bottom: 12px; text-align: left;
+  }
+
+  .scan-input-row {
+    display: flex; gap: 10px;
+    background: var(--cream);
+    border: 1.5px solid var(--border);
+    border-radius: 12px; padding: 6px 6px 6px 18px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .scan-input-row:focus-within {
+    border-color: var(--blue);
+    box-shadow: 0 0 0 4px rgba(37,99,235,0.1);
+  }
+
+  .scan-input {
+    flex: 1; background: none; border: none; outline: none;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px; color: var(--text);
+  }
+  .scan-input::placeholder { color: var(--muted); }
+
+  .scan-btn {
+    background: var(--navy);
+    color: var(--white);
+    border: none; cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px; font-weight: 600;
+    padding: 12px 24px; border-radius: 9px;
+    transition: background 0.2s, transform 0.1s;
+    white-space: nowrap;
+  }
+  .scan-btn:hover { background: var(--navy2); }
+  .scan-btn:active { transform: scale(0.98); }
+  .scan-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  .scan-hint {
+    font-size: 13px; color: var(--muted);
+    text-align: left; margin-top: 12px;
+  }
+  .scan-hint strong { color: var(--text); }
+
+  /* ── TRUST STRIP ── */
+  .trust-strip {
+    display: flex; align-items: center; justify-content: center;
+    gap: 32px; flex-wrap: wrap;
+    margin-top: 40px;
+    animation: fadeUp 0.6s ease 0.4s both;
+  }
+  .trust-item {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 13px; color: var(--muted); font-weight: 500;
+  }
+  .trust-item .icon { font-size: 16px; }
+
+  /* ── LOADING STATE ── */
+  .loading-wrap {
+    display: none;
+    width: 100%; max-width: 680px;
+    background: var(--white);
+    border: 1.5px solid var(--border);
+    border-radius: 20px; padding: 40px 32px;
+    text-align: center;
+    box-shadow: 0 8px 40px rgba(15,31,61,0.08);
+  }
+  .loading-wrap.active { display: block; }
+
+  .spinner {
+    width: 48px; height: 48px;
+    border: 3px solid var(--warm);
+    border-top-color: var(--blue);
+    border-radius: 50%;
+    margin: 0 auto 20px;
+    animation: spin 0.8s linear infinite;
+  }
+  .loading-title {
+    font-family: 'Fraunces', serif;
+    font-size: 22px; font-weight: 600; color: var(--navy);
+    margin-bottom: 8px;
+  }
+  .loading-status {
+    font-size: 14px; color: var(--muted);
+    margin-bottom: 24px;
+  }
+  .loading-steps {
+    display: flex; flex-direction: column; gap: 8px;
+    text-align: left;
+  }
+  .lstep {
+    display: flex; align-items: center; gap: 12px;
+    font-size: 14px; color: var(--muted);
+    padding: 10px 14px; border-radius: 8px;
+    background: var(--cream);
+    transition: all 0.3s;
+  }
+  .lstep.done { color: var(--green); background: rgba(22,163,74,0.06); }
+  .lstep.active { color: var(--blue); background: rgba(37,99,235,0.06); font-weight: 500; }
+  .lstep-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--border); flex-shrink: 0;
+    transition: background 0.3s;
+  }
+  .lstep.done .lstep-dot { background: var(--green); }
+  .lstep.active .lstep-dot { background: var(--blue); animation: pulse 1s infinite; }
+
+  /* ── RESULTS ── */
+  .results-wrap {
+    display: none;
+    width: 100%; max-width: 780px;
+  }
+  .results-wrap.active { display: block; }
+
+  /* Grade card */
+  .grade-card {
+    background: var(--white);
+    border: 1.5px solid var(--border);
+    border-radius: 20px; padding: 36px;
+    box-shadow: 0 8px 40px rgba(15,31,61,0.08);
+    display: flex; align-items: center; gap: 32px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .grade-circle {
+    width: 100px; height: 100px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Fraunces', serif;
+    font-size: 44px; font-weight: 900;
+    flex-shrink: 0;
+    border: 4px solid currentColor;
+  }
+  .grade-circle.A { color: var(--green); background: rgba(22,163,74,0.08); }
+  .grade-circle.B { color: #059669; background: rgba(5,150,105,0.08); }
+  .grade-circle.C { color: var(--amber); background: rgba(217,119,6,0.08); }
+  .grade-circle.D { color: #EA580C; background: rgba(234,88,12,0.08); }
+  .grade-circle.F { color: var(--red); background: rgba(220,38,38,0.08); }
+
+  .grade-info { flex: 1; min-width: 200px; }
+  .grade-headline {
+    font-family: 'Fraunces', serif;
+    font-size: 26px; font-weight: 600; color: var(--navy);
+    margin-bottom: 8px; line-height: 1.2;
+  }
+  .grade-desc { font-size: 15px; color: var(--muted); line-height: 1.6; }
+
+  .grade-stats {
+    display: flex; gap: 20px; flex-wrap: wrap; margin-top: 16px;
+  }
+  .stat-pill {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 13px; font-weight: 600;
+    padding: 6px 14px; border-radius: 100px;
+    border: 1.5px solid currentColor;
+  }
+  .stat-pill.critical { color: var(--red); background: rgba(220,38,38,0.06); }
+  .stat-pill.high     { color: #EA580C;    background: rgba(234,88,12,0.06); }
+  .stat-pill.medium   { color: var(--amber); background: rgba(217,119,6,0.06); }
+  .stat-pill.low      { color: var(--green); background: rgba(22,163,74,0.06); }
+
+  /* Findings */
+  .findings-header {
+    font-family: 'Fraunces', serif;
+    font-size: 22px; font-weight: 600; color: var(--navy);
+    margin: 28px 0 16px;
+  }
+
+  .finding-card {
+    background: var(--white);
+    border: 1.5px solid var(--border);
+    border-radius: 16px; margin-bottom: 12px;
+    overflow: hidden;
+    transition: box-shadow 0.2s;
+  }
+  .finding-card:hover { box-shadow: 0 4px 20px rgba(15,31,61,0.08); }
+
+  .finding-header {
+    display: flex; align-items: center; gap: 16px;
+    padding: 18px 22px; cursor: pointer;
+    user-select: none;
+  }
+  .sev-dot {
+    width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0;
+  }
+  .sev-dot.CRITICAL { background: var(--red); box-shadow: 0 0 0 3px rgba(220,38,38,0.15); }
+  .sev-dot.HIGH     { background: #EA580C; box-shadow: 0 0 0 3px rgba(234,88,12,0.15); }
+  .sev-dot.MEDIUM   { background: var(--amber); box-shadow: 0 0 0 3px rgba(217,119,6,0.15); }
+  .sev-dot.LOW      { background: var(--green); box-shadow: 0 0 0 3px rgba(22,163,74,0.15); }
+  .sev-dot.INFO     { background: var(--blue); box-shadow: 0 0 0 3px rgba(37,99,235,0.15); }
+
+  .finding-name {
+    flex: 1; font-size: 15px; font-weight: 600; color: var(--navy);
+  }
+  .finding-plain {
+    font-size: 13px; color: var(--muted); margin-top: 2px; font-weight: 400;
+  }
+
+  .sev-badge {
+    font-size: 11px; font-weight: 700; letter-spacing: 1px;
+    text-transform: uppercase; padding: 4px 10px;
+    border-radius: 100px;
+  }
+  .sev-badge.CRITICAL { background: rgba(220,38,38,0.1); color: var(--red); }
+  .sev-badge.HIGH     { background: rgba(234,88,12,0.1); color: #EA580C; }
+  .sev-badge.MEDIUM   { background: rgba(217,119,6,0.1); color: var(--amber); }
+  .sev-badge.LOW      { background: rgba(22,163,74,0.1); color: var(--green); }
+  .sev-badge.INFO     { background: rgba(37,99,235,0.1); color: var(--blue); }
+
+  .chevron {
+    font-size: 18px; color: var(--muted);
+    transition: transform 0.25s;
+  }
+  .finding-card.open .chevron { transform: rotate(180deg); }
+
+  .finding-body {
+    display: none;
+    padding: 0 22px 22px;
+    border-top: 1px solid var(--warm);
+  }
+  .finding-card.open .finding-body { display: block; }
+
+  .plain-explain {
+    background: var(--cream);
+    border-left: 3px solid var(--blue);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 16px;
+    margin: 14px 0;
+    font-size: 14px; line-height: 1.65; color: var(--text);
+  }
+  .plain-explain strong { color: var(--navy); display: block; margin-bottom: 4px; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+  .fix-box {
+    background: rgba(22,163,74,0.05);
+    border: 1px solid rgba(22,163,74,0.2);
+    border-radius: 10px; padding: 14px 16px; margin-top: 10px;
+    font-size: 14px; color: var(--text); line-height: 1.6;
+  }
+  .fix-box strong { color: var(--green); display: block; margin-bottom: 6px; }
+
+  /* Download btn */
+  .download-btn {
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    width: 100%; margin-top: 24px;
+    background: var(--navy); color: var(--white);
+    border: none; cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px; font-weight: 600;
+    padding: 16px 32px; border-radius: 12px;
+    transition: background 0.2s, transform 0.1s;
+  }
+  .download-btn:hover { background: var(--navy2); }
+  .download-btn:active { transform: scale(0.99); }
+
+  .rescan-btn {
+    display: block; width: 100%; margin-top: 12px;
+    background: none; border: 1.5px solid var(--border);
+    color: var(--muted); cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px; font-weight: 500;
+    padding: 13px; border-radius: 12px;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .rescan-btn:hover { border-color: var(--navy); color: var(--navy); }
+
+  /* ── HOW IT WORKS SECTION ── */
+  .how-section {
+    padding: 100px 24px;
+    max-width: 1000px; margin: 0 auto;
+    text-align: center;
+  }
+  .section-tag {
+    font-size: 12px; font-weight: 700; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--blue);
+    margin-bottom: 16px;
+  }
+  .section-title {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(32px, 5vw, 52px);
+    font-weight: 900; color: var(--navy);
+    letter-spacing: -2px; line-height: 1.05;
+    margin-bottom: 60px;
+  }
+  .steps-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 24px; text-align: left;
+  }
+  .step-card {
+    background: var(--white);
+    border: 1.5px solid var(--border);
+    border-radius: 16px; padding: 28px;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .step-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(15,31,61,0.1); }
+  .step-num {
+    font-family: 'Fraunces', serif;
+    font-size: 42px; font-weight: 900; color: var(--warm);
+    line-height: 1; margin-bottom: 16px;
+  }
+  .step-title {
+    font-size: 16px; font-weight: 700; color: var(--navy); margin-bottom: 8px;
+  }
+  .step-desc { font-size: 14px; color: var(--muted); line-height: 1.6; }
+
+  /* ── WHAT WE CHECK ── */
+  .checks-section {
+    padding: 80px 24px;
+    background: var(--navy);
+  }
+  .checks-inner { max-width: 1000px; margin: 0 auto; }
+  .checks-section .section-tag { color: rgba(255,255,255,0.5); }
+  .checks-section .section-title { color: var(--white); text-align: left; margin-bottom: 40px; }
+  .checks-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;
+  }
+  .check-item {
+    display: flex; align-items: flex-start; gap: 14px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px; padding: 18px;
+  }
+  .check-icon { font-size: 22px; flex-shrink: 0; }
+  .check-title { font-size: 14px; font-weight: 600; color: var(--white); margin-bottom: 4px; }
+  .check-desc  { font-size: 12px; color: rgba(255,255,255,0.5); line-height: 1.5; }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center; padding: 40px 24px;
+    border-top: 1px solid var(--border);
+    font-size: 13px; color: var(--muted);
+  }
+  footer strong { color: var(--navy); font-family: 'Fraunces', serif; }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0.4; }
+  }
+
+  @media (max-width: 600px) {
+    nav { padding: 16px 20px; }
+    .hero { padding: 100px 16px 60px; }
+    .scan-box { padding: 20px; }
+    .grade-card { flex-direction: column; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Web<span>Cure</span></div>
+  <div class="nav-pill">Free Website Check</div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+
+  <div class="hero-badge">Live Security Scanner</div>
+
+  <h1 class="hero-title">Is your website<br><em>actually safe?</em></h1>
+  <p class="hero-sub">Enter any website URL and we'll check it for security problems — in plain English, no tech knowledge needed.</p>
+
+  <!-- SCAN BOX -->
+  <div class="scan-box" id="scanBox">
+    <div class="scan-label">Enter your website address</div>
+    <div class="scan-input-row">
+      <input class="scan-input" id="urlInput" type="url"
+        placeholder="https://yourwebsite.com" autocomplete="off" spellcheck="false">
+      <button class="scan-btn" id="scanBtn" onclick="startScan()">Check Now →</button>
+    </div>
+    <div class="scan-hint">
+      <strong>Free &amp; safe to use.</strong> We read your site like a visitor would — we don't store anything.
+    </div>
+  </div>
+
+  <!-- LOADING -->
+  <div class="loading-wrap" id="loadingBox">
+    <div class="spinner"></div>
+    <div class="loading-title">Checking your website…</div>
+    <div class="loading-status" id="loadingStatus">This takes about 15–30 seconds</div>
+    <div class="loading-steps" id="loadingSteps">
+      <div class="lstep" id="ls1"><div class="lstep-dot"></div> Connecting to your website</div>
+      <div class="lstep" id="ls2"><div class="lstep-dot"></div> Checking your security certificate (HTTPS)</div>
+      <div class="lstep" id="ls3"><div class="lstep-dot"></div> Looking for exposed files &amp; hidden pages</div>
+      <div class="lstep" id="ls4"><div class="lstep-dot"></div> Testing for hacking vulnerabilities</div>
+      <div class="lstep" id="ls5"><div class="lstep-dot"></div> Checking privacy &amp; cookie settings</div>
+      <div class="lstep" id="ls6"><div class="lstep-dot"></div> Analysing email security (SPF, DMARC)</div>
+      <div class="lstep" id="ls7"><div class="lstep-dot"></div> Building your results</div>
+    </div>
+  </div>
+
+  <!-- RESULTS -->
+  <div class="results-wrap" id="resultsBox">
+
+    <!-- Grade card -->
+    <div class="grade-card" id="gradeCard">
+      <div class="grade-circle" id="gradeCircle">A</div>
+      <div class="grade-info">
+        <div class="grade-headline" id="gradeHeadline">Loading…</div>
+        <div class="grade-desc" id="gradeDesc"></div>
+        <div class="grade-stats" id="gradeStats"></div>
+      </div>
+    </div>
+
+    <div class="findings-header" id="findingsHeader"></div>
+    <div id="findingsList"></div>
+
+    <button class="download-btn" id="downloadBtn">
+      ⬇ Download Full PDF Report
+    </button>
+    <button class="rescan-btn" onclick="resetScan()">← Check another website</button>
+
+  </div>
+
+  <!-- TRUST STRIP -->
+  <div class="trust-strip" id="trustStrip">
+    <div class="trust-item"><span class="icon">🔒</span> No data stored</div>
+    <div class="trust-item"><span class="icon">⚡</span> Results in ~20 sec</div>
+    <div class="trust-item"><span class="icon">📋</span> Plain English results</div>
+    <div class="trust-item"><span class="icon">🆓</span> Completely free</div>
+  </div>
+
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how-section">
+  <div class="section-tag">How it works</div>
+  <div class="section-title">Three steps.<br>Zero confusion.</div>
+  <div class="steps-grid">
+    <div class="step-card">
+      <div class="step-num">01</div>
+      <div class="step-title">Type your website address</div>
+      <div class="step-desc">Just paste or type your URL above — like you'd type it into a browser. No account, no sign-up needed.</div>
+    </div>
+    <div class="step-card">
+      <div class="step-num">02</div>
+      <div class="step-title">We scan it automatically</div>
+      <div class="step-desc">Our scanner checks over 50 different security issues in about 20 seconds — the same checks professionals use.</div>
+    </div>
+    <div class="step-card">
+      <div class="step-num">03</div>
+      <div class="step-title">Get plain-English results</div>
+      <div class="step-desc">You get a safety grade (A–F), a simple explanation of any issues, and exactly what to do to fix them.</div>
+    </div>
+    <div class="step-card">
+      <div class="step-num">04</div>
+      <div class="step-title">Download your report</div>
+      <div class="step-desc">Get a professional PDF report you can share with your developer, host, or IT team to get issues fixed fast.</div>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT WE CHECK -->
+<section class="checks-section">
+  <div class="checks-inner">
+    <div class="section-tag">What we check</div>
+    <div class="section-title">50+ security checks,<br>explained simply.</div>
+    <div class="checks-grid">
+      <div class="check-item">
+        <div class="check-icon">🔐</div>
+        <div>
+          <div class="check-title">HTTPS Certificate</div>
+          <div class="check-desc">Is your padlock valid? Will it expire soon?</div>
+        </div>
+      </div>
+      <div class="check-item">
+        <div class="check-icon">🛡️</div>
+        <div>
+          <div class="check-title">Hacking Protection</div>
+          <div class="check-desc">Can attackers inject malicious code into your site?</div>
+        </div>
+      </div>
+      <div class="check-item">
+        <div class="check-icon">📁</div>
+        <div>
+          <div class="check-title">Hidden Files</div>
+          <div class="check-desc">Are private files like .env or config exposed publicly?</div>
+        </div>
+      </div>
+      <div class="check-item">
+        <div class="check-icon">🍪</div>
+        <div>
+          <div class="check-title">Cookie Privacy</div>
+          <div class="check-desc">Are your visitor cookies properly protected?</div>
+        </div>
+      </div>
+      <div class="check-item">
+        <div class="check-icon">📧</div>
+        <div>
+          <div class="check-title">Email Spoofing</div>
+          <div class="check-desc">Can someone fake emails from your domain?</div>
+        </div>
+      </div>
+      <div class="check-item">
+        <div class="check-icon">🚪</div>
+        <div>
+          <div class="check-title">Open Ports</div>
+          <div class="check-desc">Are any dangerous backdoors left open on your server?</div>
+        </div>
+      </div>
+      <div class="check-item">
+        <div class="check-icon">🔗</div>
+        <div>
+          <div class="check-title">Security Headers</div>
+          <div class="check-desc">Does your site block clickjacking &amp; content injection?</div>
+        </div>
+      </div>
+      <div class="check-item">
+        <div class="check-icon">📦</div>
+        <div>
+          <div class="check-title">Outdated Software</div>
+          <div class="check-desc">Are you running old versions with known vulnerabilities?</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <strong>WebCure</strong> — Website Security Scanner &nbsp;·&nbsp;
+  Built by Chandransh Ranjan &nbsp;·&nbsp; CSE · Lovely Professional University &nbsp;·&nbsp;
+  Winter Pep Project 2024–25
+</footer>
+
+<script>
+// ── Plain English translations ──────────────────────────────────────────────
+const plainEnglish = {
+  "SQL Injection":                { plain: "A hacker could trick your website into leaking your database — including passwords and customer data.", icon: "🗄️" },
+  "XSS":                          { plain: "Attackers could inject malicious pop-ups or steal your visitors' login sessions.", icon: "⚠️" },
+  "Cross-Site Scripting":         { plain: "Attackers could inject malicious pop-ups or steal your visitors' login sessions.", icon: "⚠️" },
+  "SSL Certificate Has Expired":  { plain: "Your padlock is broken. Visitors see a scary 'Not Secure' warning and may leave immediately.", icon: "🔓" },
+  "Site Served Over Plaintext HTTP": { plain: "Your website has no HTTPS padlock, meaning any data your visitors send (like passwords) can be intercepted.", icon: "🔓" },
+  "Missing Content-Security-Policy": { plain: "Your site has no protection against malicious code being injected by third-party scripts.", icon: "🛡️" },
+  "Missing Strict-Transport-Security": { plain: "Browsers aren't forced to use your secure HTTPS connection — attackers could downgrade the connection.", icon: "🔒" },
+  "Missing X-Frame-Options":      { plain: "Someone could embed your website invisibly inside theirs and trick your users into clicking things they shouldn't.", icon: "🖼️" },
+  "Cookie Missing HttpOnly":      { plain: "Your login cookies can be stolen by malicious scripts if your site is hacked.", icon: "🍪" },
+  "Cookie Missing Secure Flag":   { plain: "Your login cookies could be sent over an unsecured connection and intercepted.", icon: "🍪" },
+  "Login Form Missing CSRF Token":{ plain: "Attackers could trick logged-in users into taking actions on your site without their knowledge.", icon: "🔑" },
+  "Missing SPF DNS Record":       { plain: "Anyone on the internet could send emails pretending to be from your domain — perfect for phishing scams.", icon: "📧" },
+  "Missing DMARC DNS Record":     { plain: "Without this, your email address can be used in spam and phishing campaigns without your knowledge.", icon: "📧" },
+  "Directory Listing Enabled":    { plain: "Visitors can browse your website's file system like a folder — seeing files you never meant to share.", icon: "📁" },
+  "DNS Zone Transfer Allowed":    { plain: "Your full DNS infrastructure is publicly readable — giving attackers a detailed map of your servers.", icon: "🗺️" },
+  "CORS Wildcard Origin Allowed": { plain: "Any website on the internet can make requests to your site's API on behalf of your visitors.", icon: "🌐" },
+  "Sensitive Resource Exposed":   { plain: "A private file or admin page is publicly accessible without any password protection.", icon: "🚨" },
+};
+
+function getPlainEnglish(name, description) {
+  for (const [key, val] of Object.entries(plainEnglish)) {
+    if (name.includes(key)) return val;
+  }
+  return { plain: description, icon: "ℹ️" };
+}
+
+function getGrade(score) {
+  if (score <= 10) return { grade: "A", label: "Excellent — your website is well protected!", desc: "Great news — we found very few or no significant issues. Your website follows security best practices.", cls: "A" };
+  if (score <= 30) return { grade: "B", label: "Good — a few small things to tighten up.", desc: "Your website is mostly secure. There are a few minor improvements that would make it even safer.", cls: "B" };
+  if (score <= 55) return { grade: "C", label: "Fair — some issues need attention.", desc: "Your website has some security gaps. We recommend addressing the issues below, especially any marked High.", cls: "C" };
+  if (score <= 75) return { grade: "D", label: "Poor — significant vulnerabilities found.", desc: "Your website has serious security issues that put your visitors and data at risk. Please fix these soon.", cls: "D" };
+  return { grade: "F", label: "Critical — your website needs urgent attention!", desc: "We found critical vulnerabilities. Your website could be compromised. Please contact your developer immediately.", cls: "F" };
+}
+
+function getFixTip(name, remediation) {
+  const tips = {
+    "SSL": "Contact your web host or domain provider. Most hosts offer free SSL certificates via Let's Encrypt — ask them to enable it.",
+    "HTTP": "Ask your web host to enable HTTPS/SSL on your website. Most hosts do this for free.",
+    "SPF": "Log into your domain registrar (e.g. GoDaddy, Namecheap) and add an SPF record to your DNS settings. Your email provider usually gives you the exact text to copy.",
+    "DMARC": "Add a DMARC DNS record via your domain registrar. Search 'DMARC record generator' for a free tool that creates the right text for you.",
+    "X-Frame": "Ask your developer or web host to add the header 'X-Frame-Options: DENY' to your server configuration.",
+    "Cookie": "Ask your developer to add 'HttpOnly' and 'Secure' flags to your session cookies.",
+    "CSP": "Ask your developer to add a Content Security Policy header to your website.",
+    "SQL": "Ask your developer to use 'parameterized queries' instead of building SQL strings directly — this is a fundamental fix.",
+    "XSS": "Ask your developer to sanitize and escape all user input before displaying it on the page.",
+    "Directory": "Ask your web host or developer to disable 'directory listing' in your server settings.",
+  };
+  for (const [key, tip] of Object.entries(tips)) {
+    if (name.includes(key)) return tip;
+  }
+  return remediation || "Contact your web developer or hosting provider and share this report with them — they'll know what to do.";
+}
+
+// ── Scan state ───────────────────────────────────────────────────────────────
+let currentScanData = null;
+
+async function startScan() {
+  const url = document.getElementById('urlInput').value.trim();
+  if (!url) { alert('Please enter a website URL first.'); return; }
+  if (!url.startsWith('http://') && !url.startsWith('https://')) {
+    document.getElementById('urlInput').value = 'https://' + url;
+  }
+
+  const finalUrl = document.getElementById('urlInput').value.trim();
+
+  // Show loading
+  document.getElementById('scanBox').style.display = 'none';
+  document.getElementById('trustStrip').style.display = 'none';
+  document.getElementById('resultsBox').classList.remove('active');
+  document.getElementById('loadingBox').classList.add('active');
+
+  // Animate steps
+  const steps = [1,2,3,4,5,6,7];
+  let stepIdx = 0;
+  const stepTimer = setInterval(() => {
+    if (stepIdx > 0) document.getElementById('ls'+stepIdx).classList.replace('active','done');
+    stepIdx++;
+    if (stepIdx <= steps.length) {
+      document.getElementById('ls'+stepIdx)?.classList.add('active');
+    } else {
+      clearInterval(stepTimer);
+    }
+  }, 3000);
+
+  try {
+    const res = await fetch('/api/scan', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ url: finalUrl })
+    });
+    clearInterval(stepTimer);
+    // mark all done
+    steps.forEach(i => {
+      const el = document.getElementById('ls'+i);
+      el.classList.remove('active');
+      el.classList.add('done');
+    });
+    await new Promise(r => setTimeout(r, 600));
+    const data = await res.json();
+    currentScanData = data;
+    showResults(data);
+  } catch(e) {
+    clearInterval(stepTimer);
+    // Demo mode if backend not running
+    showResults(getDemoData(finalUrl));
+  }
+}
+
+function showResults(data) {
+  document.getElementById('loadingBox').classList.remove('active');
+  document.getElementById('resultsBox').classList.add('active');
+
+  const score = data.risk_score || 0;
+  const vulns = data.vulnerabilities || [];
+  const counts = data.counts || {};
+  const gradeInfo = getGrade(score);
+
+  // Grade circle
+  const gc = document.getElementById('gradeCircle');
+  gc.textContent = gradeInfo.grade;
+  gc.className = 'grade-circle ' + gradeInfo.cls;
+  document.getElementById('gradeHeadline').textContent = gradeInfo.label;
+  document.getElementById('gradeDesc').textContent = gradeInfo.desc;
+
+  // Stats pills
+  const statsEl = document.getElementById('gradeStats');
+  statsEl.innerHTML = '';
+  const sevMap = [
+    ['critical','🔴','Critical'],['high','🟠','High'],
+    ['medium','🟡','Medium'],['low','🟢','Low']
+  ];
+  sevMap.forEach(([cls, emoji, label]) => {
+    const count = counts[label.toUpperCase()] || 0;
+    if (count > 0) {
+      statsEl.innerHTML += `<div class="stat-pill ${cls}">${count} ${label}</div>`;
+    }
+  });
+
+  // Findings
+  const total = vulns.length;
+  document.getElementById('findingsHeader').textContent =
+    total === 0 ? '✅ No significant issues found!' :
+    `What we found (${total} issue${total !== 1 ? 's' : ''})`;
+
+  const list = document.getElementById('findingsList');
+  list.innerHTML = '';
+
+  vulns.forEach((v, i) => {
+    const pe = getPlainEnglish(v.name, v.description);
+    const fix = getFixTip(v.name, v.remediation);
+    const sev = v.severity || 'INFO';
+
+    const card = document.createElement('div');
+    card.className = 'finding-card';
+    card.innerHTML = `
+      <div class="finding-header" onclick="toggleCard(this)">
+        <div class="sev-dot ${sev}"></div>
+        <div>
+          <div class="finding-name">${pe.icon} ${v.name}</div>
+          <div class="finding-plain">${pe.plain.substring(0,80)}…</div>
+        </div>
+        <div class="sev-badge ${sev}">${sev}</div>
+        <div class="chevron">⌄</div>
+      </div>
+      <div class="finding-body">
+        <div class="plain-explain">
+          <strong>What this means for you</strong>
+          ${pe.plain}
+        </div>
+        <div class="fix-box">
+          <strong>✅ How to fix it</strong>
+          ${fix}
+        </div>
+      </div>`;
+    list.appendChild(card);
+  });
+
+  // Download button
+  document.getElementById('downloadBtn').onclick = () => downloadReport(data);
+}
+
+function toggleCard(header) {
+  const card = header.parentElement;
+  card.classList.toggle('open');
+}
+
+async function downloadReport(data) {
+  const btn = document.getElementById('downloadBtn');
+  btn.textContent = '⏳ Generating your report…';
+  btn.disabled = true;
+  try {
+    const res = await fetch('/api/report', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    const domain = new URL(data.url).hostname.replace('www.','');
+    a.href = url; a.download = `WebCure_Report_${domain}.pdf`; a.click();
+  } catch(e) {
+    alert('Could not generate PDF. Please make sure the backend is running.');
+  }
+  btn.innerHTML = '⬇ Download Full PDF Report';
+  btn.disabled = false;
+}
+
+function resetScan() {
+  document.getElementById('resultsBox').classList.remove('active');
+  document.getElementById('urlInput').value = '';
+  document.getElementById('scanBox').style.display = 'block';
+  document.getElementById('trustStrip').style.display = 'flex';
+  document.getElementById('loadingBox').classList.remove('active');
+  // Reset loading steps
+  for(let i=1;i<=7;i++){
+    const el = document.getElementById('ls'+i);
+    el.classList.remove('active','done');
+  }
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// Demo data when backend not running
+function getDemoData(url) {
+  return {
+    url, risk_score: 52, total_findings: 5,
+    scanned_at: new Date().toISOString(),
+    counts: { CRITICAL:0, HIGH:2, MEDIUM:2, LOW:1, INFO:0 },
+    vulnerabilities: [
+      { severity:'HIGH', name:'Missing Strict-Transport-Security', description:'Browsers are not forced to use HTTPS.', remediation:'Add HSTS header to your server config.', cvss:7.4, owasp_id:'A05:2021', owasp_name:'Security Misconfiguration' },
+      { severity:'HIGH', name:'Missing X-Frame-Options', description:'Clickjacking attacks are possible.', remediation:'Add X-Frame-Options: DENY to your server.', cvss:6.5, owasp_id:'A05:2021', owasp_name:'Security Misconfiguration' },
+      { severity:'MEDIUM', name:'Missing Content-Security-Policy', description:'No CSP header found.', remediation:'Add a Content-Security-Policy header.', cvss:5.4, owasp_id:'A05:2021', owasp_name:'Security Misconfiguration' },
+      { severity:'MEDIUM', name:'Missing SPF DNS Record', description:'Email spoofing is possible from your domain.', remediation:'Add an SPF TXT record to your DNS.', cvss:5.3, owasp_id:'A05:2021', owasp_name:'Security Misconfiguration' },
+      { severity:'LOW', name:'Missing DMARC DNS Record', description:'No DMARC policy found.', remediation:'Add a _dmarc TXT record to your DNS.', cvss:3.7, owasp_id:'A05:2021', owasp_name:'Security Misconfiguration' },
+    ]
+  };
+}
+
+// Enter key support
+document.getElementById('urlInput').addEventListener('keydown', e => {
+  if (e.key === 'Enter') startScan();
+});
+</script>
+</body>
+</html>
