@@ -188,8 +188,7 @@ This tool is built for:
 
 **Chandransh Ranjan**  
 B.Tech Computer Science & Engineering  
-Lovely Professional University  
-Winter Pep Project 2025-26
+
 
 ---
 
